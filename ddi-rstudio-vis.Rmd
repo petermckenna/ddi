@@ -1,0 +1,504 @@
+---
+title: "Introduction to Data Visualisation - RStudio"
+author: "Dr Peter McKenna | p.mckenna@hw.ac.uk"
+date: "16/11/2021"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    fig_width: 7
+    fig_height: 6
+    fig_caption: yes
+  html_document:
+    toc: yes
+    toc_depth: '3'
+    df_print: paged
+---
+
+```{r setup, include=F, warning=FALSE}
+
+ knitr::opts_chunk$set(echo = T, 
+                       eval = F,    
+                       message = FALSE, 
+                       warning = FALSE, 
+                       tidy.opts = list(width.cutoff = 60),
+                       tidy = TRUE)
+
+# default for instructor is echo = T; eval = T
+
+# you only want to see the results for certain chunks (e.g., plots)
+
+# add theme here to stop knitting issues
+
+# create your own theme
+
+library(tidyverse)
+
+my_theme <-
+  theme_classic(base_size = 15) + # change the base size of text
+  theme(
+    axis.title = element_text(size = rel(1.05)), # adjust the relative size of axis text
+    legend.title = element_text(size = rel(1.05)), # adjust the relative size of the legend text
+    plot.title = element_text(hjust = 0.5))  # centre the title (Horizontal alignment: 0 = left, 0.5 = center, 1 = right)
+ 
+```
+
+
+# **Essentials**
+
+Before beginning today you must install two programs:
+
+* `R`
+* `RStudio`
+
+[CLICK HERE for installation instructions for both programs by operating system.](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu)
+Please follow the installation instructions carefully.
+
+In this tutorial you will read text and code chunks.
+Code chunks look like this, and contain the code for each of the operations we are going to perform today.
+
+```{r chunk example}
+
+# this is what a code chunk looks like
+
+```
+
+
+# DDI Data Visualisation in RStudio
+
+As an introduction to applied data visualisation we are going to generate some plots from an existing dataset in RStudio.
+I will show you how to do the following things in this exercise:
+
+* Install & load the RStudio packages
+* Create a bar plot from the `Diamonds` dataset
+* Add layers to the plot to make it more informative
+* Adjust the aesthetic features of the plot
+
+**NOTE** Try not copy & paste code from this doc; typing out the code is essential to developing your programming skills!
+
+
+## A Very Short Introduction
+
+The following block of code will install and load RStudio's *Tidyverse* package.
+The Tidyverse is a suit of functions and datasets that allow you to create simple and interpretable code for tidying, wrangling, visualising and analysing data.
+Here, we are going to play with some of the visualising commmands of the `ggplot2` package that is loaded with the Tidyverse.
+
+
+### Getting Started
+
+To get started create a new project in RStudio and save to a meaningful location.
+Once installed, open a new script (`Ctrl` + `Shift` + `N`) and enter the following code:
+
+
+```{r install package, eval=F}
+
+# Install packages
+
+install.packages('tidyverse') # install the tidyverse package
+install.packages('RColorBrewer') # install colour brewer
+install.packages('plotly') # install plotly for interactive visualisations
+
+```
+
+Do not be concerned by RStudio's request to store packages in a local library.
+This is so you can use these packages in future without the need to install.
+You may also see several warning messages about the package version or conflicts. 
+You can ignore these so long as the package is successfully installed. 
+
+After a package is installed is must be loaded into RStudio for use.
+
+```{r load package, eval=T}
+
+# Load packages
+
+library(tidyverse) # load the tidyverse
+library(RColorBrewer) # load colour brewer
+library(plotly)
+
+```
+
+I want to say a little about commenting here.
+Using the `#` key allows you to add inactive text to your script.
+So, you can add comments using `#` to keep a log of your activity
+
+
+### Running the Code
+
+To run the code hit `Ctrl` + `ENTER`.
+You can peform this action on multiple lines by highlighting them.
+Text will appear in the console section. This is fine, RStudio is just installing the package dependencies. 
+Save the script (`Ctrl` + `S`) as **ddi-vis**. 
+
+
+# Download the Data
+
+The `diamonds` data is part of the Tidyverse library.
+So, we can load it into our workspace using a few simple commands
+
+```{r load data, eval=T}
+
+data <-    # this is the assign symbol
+  diamonds # we have assigned the existing dataset 'diamonds' to our dataframe 'data'
+
+```
+
+
+## The Diamonds Dataset
+
+Here is the official [Diamonds dataset webpage](https://ggplot2.tidyverse.org/reference/diamonds.html).
+Diamonds is a data frame with 53940 rows and 10 variables.
+Here's information about the variables in the data:
+
+* **price** = price in US dollars ($326--$18,823)
+* **carat** = weight of the diamond (0.2--5.01)
+* **cut** = quality of the cut (Fair, Good, Very Good, Premium, Ideal)
+* **color** = diamond colour, from D (best) to J (worst)
+* **clarity** = a measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))
+* **x** = length in mm (0--10.74)
+* **y** = width in mm (0--58.9)
+* **z** = depth in mm (0--31.8)
+* **depth** = total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)
+* **table** = width of top of diamond relative to widest point (43--95)
+
+
+## Examining the Data
+
+We can take a quick look at the data by clicking the `data` object that has been created in the Global Environment or by using the following code
+
+``` {r Examining the data}
+
+View(data) # opens a new tab with a large subset of the dataset
+
+glimpse(data) # gives a summary of the data variables
+
+head(data) # top 6 rows
+
+tail(data) # final 6 rows
+
+dim(data) # dimensions of the data object
+
+```
+
+
+As the dataset is quite large with several variables it's difficult to glean any trends just by observing the raw data.
+This is where the power of data visualisation really comes to the fore.
+
+
+# Visualising the Diamonds Dataset 
+
+Let's start by plotting the frequency of the different cut qualities.
+
+
+## A Simple Plot of Cut Quality Frequency
+
+Add a comment using `#` to state what you are about to do.
+Then enter the following code.
+
+```{r plot 1}
+
+ggplot(data) +          # call ggplot2, use data dataframe "data" 
+  geom_bar(mapping = aes(x = cut)) # set `cut` as our x-axis variable
+
+```
+
+This plot is useful in that we can see which of the cuts is most frequent in the dataset.
+Most of the diamonds are an "ideal" cut.
+However, it is not very informative (as it only covers one variable) nor aesthetically pleasing.
+In a good plot the key information should pop out at you.
+
+
+### Adding Colour
+
+One way to make you plot pop is with colour.
+
+```{r plot 2}
+
+ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = cut)) # set the bar fill to `cut` variable
+
+```
+
+Here we get a much clearer distinction between the different cuts.
+
+
+### Adding Another Variable
+
+We can augment this plot with information about the diamonds clarity.
+
+```{r plot 3}
+
+ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = clarity)) # set the bar fill to `clarity`
+
+```
+
+Have a look at the variables summary above.
+In the variable `clarity` I1 = low clarity; IF = high clarity.
+So, you can begin to appreciate how good data visualization tells a detailed story about the data.
+
+
+### Adjusting the Aesthetics: Transparency
+
+As `clarity` is present as a variable, you may wish to adjust the bars transparency for thematic effect.
+
+```{r plot 4}
+
+ggplot(data, mapping = aes(x = cut, fill = clarity)) + 
+  geom_bar(alpha = 1/5,   # set the alpha transparency level to 1/5
+           position = "identity") # use the raw data values
+
+```
+
+
+### Going too far
+
+It's easy to overcook things when playing with the aesthetics.
+This is what the plot looks like if you remove the fill colouring.
+
+```{r plot 5}
+
+ggplot(data, mapping = aes(x = cut, fill = clarity)) + 
+  geom_bar(fill = NA, position = "identity")
+
+```
+
+
+### Changing the Barplot Presentation
+
+We can stack the variables `cut` and `clarity` to present proportions in a single
+bar using the argument `position = "fill"`. 
+
+```{r plot 6}
+
+ggplot(data) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill") 
+
+# `position = "fill"` tells ggplot to stack by `clarity` categories
+
+```
+
+So, the y-axis now represents the proportion of the dataset (e.g., from 0-1). 
+Whether or not this is easier to interpret is subjective.
+
+You can also try stacking the bars side by side using `position = "dodge"`
+
+```{r plot 7}
+
+ggplot(data) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge") 
+
+# `position = "dodge"` tells ggplot to side-stack by `clarity` units
+
+```
+
+
+# Tidying Up Other Elements
+
+## Plot Theme
+
+The plot theme is another important aesthetic feature.
+There are several existing themes in the `ggplot2` library.
+
+```{r plot theme}
+
+# classic
+
+ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = clarity)) +
+  theme_classic()
+
+# minimal
+
+ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = clarity)) +
+  theme_minimal()
+
+# dark
+
+ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = clarity)) +
+  theme_dark()
+
+```
+
+
+# Create Theme to Standardise Plot Aesthetic
+
+ggplot axis label text size quite small by default
+We can edit this using the `theme` command
+
+```{r plot axes}
+
+# create your own theme
+
+my_theme <-
+  theme_classic(base_size = 15) + # change the base size of text
+  theme(
+    axis.title = element_text(size = rel(1.05)), # adjust the relative size of axis text
+    legend.title = element_text(size = rel(1.05)), # adjust the relative size of the legend text
+    plot.title = element_text(hjust = 0.5))  # centre the title (Horizontal alignment: 0 = left, 0.5 = center, 1 = right)
+
+# apply theme to a plot
+
+ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = clarity)) +
+  ggtitle("Cut and Clarity of Diamonds") +
+  my_theme 
+
+```
+
+
+Axis labels can be modified using the `labs` command.
+
+```{r lables}
+
+# labels can be amended with the `labs` argument
+
+ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = clarity)) +
+  ggtitle("Cut and Clarity of Diamonds") +
+  labs(x = "\nCut", y = "Frequency\n") +
+  my_theme
+  
+```  
+
+Notice the use of the newline `\n` command to space out the axis labels better.
+
+
+# Examples of other plot types
+
+I have given you the tools for building tidy bar-plots.
+However, there are many other types of plot.
+Let's stick to the `diamonds` dataset and try some others for fun.
+
+
+## Jitter Plot of Diamonds Cut and Clarity
+
+```{r jitter}
+
+ggplot(data, aes(cut, y = clarity)) + 
+  geom_jitter(alpha = 0.05) +
+  labs(title = "Diamond Frequency by Cut and Clarity", 
+       x = "\nCut", 
+       y = "Clarity\n") +
+  my_theme
+
+```
+
+
+`geom_jitter` generates a dotplot that “jitters” the points by adding statistical noise. 
+This makes it easier to compare counts between all combinations of two variables (in our case `cut` and `clarity`).
+
+## Diamond Data Boxplots
+
+Boxplots can also be used to examine the relationship between the diamonds price cut and quality. 
+As this plot will include 3 variables it can be said to be multivariate.
+
+I've assigned the plot to an object first to apply a new colour scheme with the RColourBrewer package. 
+
+### Data Visualisation in Action
+
+Say you were asked to create a plot to compare the cost of `Ideal` and `Premium`
+diamond cuts for three clarities; `I1` (worst), `VS1`, and `IF` (best). 
+
+```{r boxplot1}
+
+# create a subset data object
+
+cut_data <-
+  data %>% # with the diamonds dataset
+  filter(cut %in% c("Premium", "Ideal"),
+         clarity %in% c("I1", "VS1", "IF")) # let's take a look at Premium and Ideal cuts spcifically
+  
+bp <-
+  cut_data %>%
+  ggplot(., aes(factor(cut), price, fill=clarity)) + 
+  geom_boxplot(outlier.shape = NA) + # do not plot outliers
+  ggtitle("Diamond Price According to Cut and Clarity\n") + 
+  labs(x = "Cut\n", y = "\nDiamond Price US$") +
+  ylim(0,7500) +
+  coord_flip() # flip the plot 90 degrees clockwise
+  
+  
+
+bp + 
+  my_theme +
+  scale_fill_brewer(palette="Set2") +
+  guides(fill = guide_legend(title = "Clarity", # rename the legend
+                             reverse = TRUE)) # reverse the order of the legend items
+
+```
+
+The bold lines on the box represent the median, and the 'whiskers' are the minimum and maximum.  
+
+## Exercise
+
+What can you infer about the role of clarity and cut on price for these diamond types?
+
+
+## Plotting Relationships Using Facet
+
+```{r colour facet plot}
+
+bf <-
+  cut_data %>%
+  filter(color %in% c("D", "E", "J")) %>% # filter by three colours: D, E, J
+  ggplot(., aes(factor(cut), price, fill=clarity)) + 
+  geom_boxplot() + 
+  ggtitle("Diamond Price According to Colour, Clarity and Cut\n") + 
+  labs(x = "Cut\n", y = "\nDiamond Price U$") + 
+  ylim(0,7500) +
+  coord_flip() + # flip the plot 90 degrees clockwise
+  facet_grid(cols = vars(color))
+  
+
+bf +
+  my_theme +
+  scale_fill_brewer(palette="Set2") +
+  guides(fill = guide_legend(title = "Clarity", 
+                             reverse = TRUE)) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) # adjust x-axis text angle
+
+
+
+```
+
+
+# Creating an Interactive Plot using `plotly`
+
+The `plotly` package allows us to add levels of interactivity to our visualisations
+such as subsetting displays by selecting variable levels. 
+
+```{r static to interactive plot with plotly}
+
+bp <-
+  ggplot(data) +
+  geom_bar(mapping = aes(x = cut, fill = clarity)) +
+  ggtitle("Cut and Clarity of Diamonds") +
+  labs(x = "\nCut", y = "Frequency\n") +
+  my_theme
+
+ggplotly(bp) # create interactve version of plot
+
+
+```
+
+
+# Summary
+
+* RStudio is a great tool for learning about data visualisation.
+* There are datasets in the `tidyverse` package ideal for deploying visualisation techniques, creating exercises, and assessments. 
+* Today, I've scratched the surface of what is possible, and hopefully whet your data vis appetites!
+* There are plenty of free online resources dedicated to plotting in RStudio.
+
+
+# Additional resources
+
+[R Graphics Cookbook, 2nd edition](https://r-graphics.org/index.html) -- very useful starting guide for ggplot2
+
+[R for Data Science](http://r4ds.had.co.nz/) -- useful for learning *Tidyverse* syntax
+
+[Bookdown Chapter on Data Visualisation](https://bookdown.org/mikemahoney218/IDEAR/visualizing-your-data.html)
+ 
+
