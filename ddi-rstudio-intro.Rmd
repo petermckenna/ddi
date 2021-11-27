@@ -1,0 +1,284 @@
+---
+title: "ddi-intro-r"
+author: "petermckenna"
+date: "29/11/2021"
+output: html_document
+---
+
+---
+title: "Introduction to Data Visualisation - RStudio"
+author: "Dr Peter McKenna | p.mckenna@hw.ac.uk"
+date: "16/11/2021"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    fig_width: 7
+    fig_height: 6
+    fig_caption: yes
+  html_document:
+    toc: yes
+    toc_depth: '3'
+    df_print: paged
+---
+
+```{r setup, include=F, warning=FALSE}
+
+# knitr setup
+
+knitr::opts_chunk$set(echo = T, 
+                       eval = F,    
+                       message = FALSE, 
+                       warning = FALSE, 
+                       tidy.opts = list(width.cutoff = 60),
+                       tidy = TRUE)
+
+# default for instructor is echo = T; eval = T
+# you only want to see the results for certain chunks (e.g., plots)
+# add theme here to stop knitting issues
+
+# create your own theme
+
+library(tidyverse)
+
+my_theme <-
+  theme_classic(base_size = 15) + # change the base size of text
+  theme(
+    axis.title = element_text(size = rel(1.05)), # adjust the relative size of axis text
+    legend.title = element_text(size = rel(1.05)), # adjust the relative size of the legend text
+    plot.title = element_text(hjust = 0.5))  # centre the title (Horizontal alignment: 0 = left, 0.5 = center, 1 = right)
+ 
+```
+
+
+# **Essentials**
+
+Before beginning today you must install two programs:
+
+* `R`
+* `RStudio`
+
+[CLICK HERE for installation instructions for both programs by operating system.](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu)
+Please follow the installation instructions carefully.
+
+In this tutorial you will read text and code chunks.
+Code chunks look like this, and contain the code for each of the operations we are going to perform today.
+
+
+```{r chunk example}
+# this is what a code chunk looks like
+```
+
+# Introduction to R and RStudio
+
+* `R` is a programming language
+* Powerful tool for performing mathematical and statistical operations on data
+* Become popular in recent years for data science due to versatility
+* Today I will scratch the surface of R's functionality
+
+
+# Today's intro content
+
+* Get you a little familiar with operations of `base R`
+* Walk through some programming examples
+* Introduce you to the `tidyverse`: a popular data science ecosystem 
+* Perform data manipulation using the `tidyverse` functions
+
+
+# Introduction to R
+
+
+## Create subdirectories
+
+* Before we get started let's create some folders in our directory
+
+```{r folder setup}
+
+dir.create("data_raw")
+dir.create("data_tidy")
+dir.create("fig_output")
+
+```
+
+* To get started create a new project in RStudio and save to a meaningful location
+* These folders will come in handy further into our exercises.
+
+
+## Install and load packages
+
+* the following packages need to be installed an loaded
+* R will ask if it can create a directory to store the packages - click `OK` to continue
+
+```{r install package, eval=F}
+
+# Install packages
+
+install.packages('tidyverse') # install the tidyverse package(s)
+
+```
+
+* Do not be concerned by RStudio's request to store packages in a local library.
+* This is so you can use these packages in future without the need to install.
+* You may also see several warning messages about the package version or conflicts. 
+* You can ignore these so long as the package is successfully installed. 
+
+After a package is installed is must be loaded into RStudio for use.
+
+```{r load package, eval=T}
+
+# Load packages
+
+library(tidyverse) # load the tidyverse
+
+```
+
+* I want to say a little about commenting here.
+* Using the `#` key allows you to add inactive text to your script.
+* So, you can add comments using `#` to keep a log of your activity
+
+
+### Running the Code
+
+* To run the code hit `Ctrl` + `ENTER`.
+* You can perform this action on multiple lines by highlighting them.
+* Text will appear in the console section. This is fine, RStudio is just installing the package dependencies. 
+* Save the script (`Ctrl` + `S`) as **ddi-r-intro**. 
+
+
+## Some Basics
+
+```{r basics}
+
+# some simple operations
+
+3+5
+
+12/7
+
+x <- 5 # we use the assign operator "<-" to assign values to an object
+
+7 -> x
+
+x
+
+# some simple mathematics
+
+x <- 23
+
+y <- 67
+
+area_rect <- x*y
+
+# BMI
+
+height <- 1.8
+
+weight <- 80
+
+bmi <- 
+  (weight/(height*height))
+
+
+```
+
+## Using functions
+
+```{r functions}
+
+# square root
+
+sqrt(4)
+
+a <- 4
+
+sqrt(a)
+
+# rounding numeric values
+
+round(3.14159)
+
+args(round)
+
+help(round)
+
+?round
+
+round(3.14159, digits = 2)
+
+round(3.14159, 2)
+
+round(digits = 2, x = 3.14159)
+
+round(55.15, -2)
+
+round(55.15, -3)
+
+```
+
+
+## Vectors and data types
+
+```{r vectors and data types}
+
+# create object for test score
+
+test_scores <- 
+  c(3,5,2,8,7)
+
+test_scores
+
+# create object for students
+
+students <-
+  c("Ronald", "Sophie", "Max", "Teresa", "Mandy")
+
+
+# check length of test_score
+
+length(test_scores)
+
+length(students)
+
+# check data type
+
+class(test_scores)
+
+class(students)
+
+str(test_scores)
+
+str(students)
+
+# appending
+
+students <-
+  c(students, "Dennis") # add Dennis to the students vector
+
+students
+
+
+
+```
+
+### Mixed data types
+
+* Let's create and examine an object with both numeric and character units
+
+```{r mixed data types}
+
+
+
+```
+
+
+# `tidyverse` and Starwars
+
+* [Information on Starwars dataset](https://dplyr.tidyverse.org/reference/starwars.html)
+
+
+
+
+
+
+
