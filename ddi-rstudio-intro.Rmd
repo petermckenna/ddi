@@ -397,5 +397,16 @@ students[students %in% c("Teresa", "Ronald")]
 * It means "then do this"
 
 
+## Download the data
+
+```{r download data, echo = TRUE, eval = FALSE, warning = FALSE}
+
+# download data file from my personal github
+
+download.file("https://github.com/petermckenna/ddi/blob/main/exp_data.csv", "data_raw/exp_data.csv", mode = "wb")
+
+
+```
+
 
 
