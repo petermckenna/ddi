@@ -62,6 +62,8 @@ Before beginning today you must install two programs:
 [CLICK HERE for installation instructions for both programs by operating system.](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu)
 Please follow the installation instructions carefully.
 
+All the code from today's session is available on my personal Github: [CLICK HERE TO ACCESS CODE](https://github.com/petermckenna/ddi/blob/main/ddi-rstudio-intro.Rmd).
+
 In this tutorial you will read text and code chunks.
 Code chunks look like this, and contain the code for each of the operations we are going to perform today.
 
@@ -69,6 +71,7 @@ Code chunks look like this, and contain the code for each of the operations we a
 ```{r chunk example}
 # this is what a code chunk looks like
 ```
+
 
 # Introduction to R and RStudio
 
@@ -397,6 +400,8 @@ students[students %in% c("Teresa", "Ronald")]
 * It means "then do this"
 
 
+# Working with data objects
+
 ## Download the data
 
 ```{r download data, echo = TRUE, eval = FALSE, warning = FALSE}
@@ -407,6 +412,156 @@ download.file("https://github.com/petermckenna/ddi/blob/main/exp_data.csv", "dat
 
 
 ```
+
+## Read in the data
+
+* Now that we have downloaded the data we nened to read it in
+* Today we are going to read in a .csv file
+* RStudio can read in all data types with the package `readr` (e.g., .xls)
+
+```{r reading in the data}
+
+data <-                      # assign ( <- ) the label "data" to next set of commands
+  read_csv("exp_data.csv") # read in csv file called "exp_data.csv"
+
+```
+
+
+## Experiment data info
+
+* `id`         = participant number
+* `like`       = rating of assistants likeability from 1 = "Did not like at all" to 5 = "Liked it a lot" 
+* `voice_type` = speaker voice type including two levels: Female; Male. 
+* `conv_len`   = duration of the conversation between the user and the smart speaker measured in sec
+
+
+## Inspecting the data
+
+* Let's go through each of the commands below 
+* Checking data with these commands helps you to get a better understanding of the data
+* `head` & `tail` for example help you quickly determine if the dataset has been read in properly from top to bottom 
+
+
+```{r inspecting the data, echo = TRUE, eval = FALSE}
+
+head(data)    # shows top 6 rows
+
+tail(data)    # shows bottom 6 rows
+
+dim(data)     # number of rows and columns
+
+names(data)   # list vector names
+
+# you can use square brackets to give an index to certain elements of the data
+
+names(data)[2] # give the name of column 2
+
+View(data)    # opens subset of the data in a new tab; note the capital 'V'
+
+glimpse(data) # short by-vector summary
+
+```
+
+
+# Data wrangling and manipulation with the `tidyverse`
+
+## Using `filter` to subset by row
+
+```{r filtering data}
+
+# filtering by single element
+
+data %>%
+  filter(id == 1:5) # participants 1 to 5
+
+data %>%
+  filter(voice_type != "female") # "!=" denotes exclude
+
+# filtering by multiple elements
+
+data %>%
+  filter(id == 1:5, 
+         voice_type == "female")      
+
+```
+
+## Using `mutate` to append object
+
+```{r mutate data}
+
+# say we knew that participants 1:6 were female and the rest were male
+
+# we can use an ifelse statement to create a new vector `gender` based on this criteria
+
+data %>%
+  mutate(gender = ifelse(id %in% 1:6, 
+                         "female", 
+                         "male"))
+
+```
+
+## Using `select` to subset by column
+
+```{r select subset by col}
+
+data %>%
+  select(id, like) # you can use a colon to select multiple vectors 
+
+# using do not select
+
+data %>%
+  select(-id) # everything except `id`
+
+# you can also reorder existing cols with select
+
+data %>%
+  select(like, conv_len, id)
+
+# or with vector numbers instead of names
+
+data %>%
+  select(4, 2, 3, 1)
+
+```
+
+# Summarising data
+
+* In research, we are interested in summary statistics
+* I'll give you a brief overview of how to generate using the `tidyverse`
+
+```{r summarising data}
+
+data %>%
+  summarise(med_like = median(like)) # here we generate the median of `like` and call the summary "med_like"
+
+
+data %>%
+  summarise(med_rating = median(like),    
+            avg_conv = mean(conv_len),       # new vector `avg_conv` is the mean of conv_len
+            sd_conv = sd(conv_len))          # new vector `sd_conv` is S.D. of conv_len
+
+# grouping data
+
+  data %>%                               # create new object `bp` from data
+  group_by(voice_type) %>%               # group by `voice_type`                    
+  summarise(avg_conv = mean(conv_len),   # new vector avg_conv is the mean of conv_len 
+            sd_conv = sd(conv_len))      # new vector sd_conv is the S.D. of conv_len
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
