@@ -221,14 +221,14 @@ round(55.15, -3)
 
 ```{r vectors and data types}
 
-# create object for test score
+# create vector for test score
 
 test_scores <- 
   c(3,5,2,8,7)
 
 test_scores
 
-# create object for students
+# create vector for students
 
 students <-
   c("Ronald", "Sophie", "Max", "Teresa", "Mandy")
@@ -267,17 +267,134 @@ students
 
 ```{r mixed data types}
 
+test_answers <-
+  c("a", 5, 8, TRUE, 3i)
 
+typeof(test_answers)
+
+class(test_answers)
+
+str(test_answers)
+
+test_answers2 <-
+  c(FALSE, 4, 7, TRUE)
+
+str(test_answers2)
 
 ```
 
+### Subsetting vectors
 
-# `tidyverse` and Starwars
+```{r subsetting vectors}
 
-* [Information on Starwars dataset](https://dplyr.tidyverse.org/reference/starwars.html)
+# subsetting from our vectors
+
+test_answers
+
+test_answers[2] # return 2nd element
+
+test_answers[c(3,2)] # return elements in the order you specify
+
+students[c(5,4,2)]
+
+# what about elements that don't exist?
+
+students[c(9,23,4,1)]
+
+```
+
+### Conditional subsetting
+
+* Let's amend the test_score vector slightly before we continue
+
+```{r amend test_score for exercises}
+
+# let's use the append the test_scores vector
+
+test_scores <-
+  c(test_scores, 10, 2, 1, 3, 6)
+
+```
+
+* Type of conditional subsetting
+
+```{r conditional subsetting exercises}
+
+ls() # clear the consolse
+
+test_scores
+
+test_scores > 3 # boolean assessment
+
+test_scores[test_scores > 3] # subsets the vector
+
+# using boolean operators
+
+test_scores[test_scores <= 2 | test_scores == 6] # `|` is the OR operator
+
+test_scores[test_scores <= 3 & test_scores > 7] # `&` is the AND operator
+
+# boolean operators on character vector
+
+students 
+
+students[students == "Max" | students == "Mandy"]
+
+# using the %in% operator
+
+students %in% c("Teresa", "Ronald")
+
+students[students %in% c("Teresa", "Ronald")]
+
+```
+
+# End of Intro to R
+
+----
+
+# Introduction to `tidyverse`
+
+* In this introductory class you are going to learn how to
+  + read a .csv data file into R Studio
+  + wrangle and explore the data using the *Tidyverse* functions
+  + explore the data's distribution
+  + generate plots
+  
+# The `tidyverse`
+
+* Today we are using `tidyverse` methods to explore and wrangle the data
+* The Tidyverse is a set of R packages that allows for more user-friendly programming, relative to what's called *base R*
+* For more about the Tidyverse see Hadley Wickham's free online text [R for Data Science](http://r4ds.had.co.nz/)
+* We are covering content from R for Data Science chapters 1,2,3 & 11.
 
 
+## Main verbs of R's Tidyverse
 
+* The `tidyverse` packages allow us to use the following verbs:
+
+    + `filter`        : extract rows
+    + `select`        : extract columns 
+    + `pivot_wider`   : spread rows to columns
+    + `pivot_longer`  : gather columns into rows
+    + `mutate`        : compute and append new/existing columns
+    + `summarise`     : summarise data based on stated criteria
+
+* These verbs make the syntax of the previous operations (e.g., subsetting) easier to interpret
+
+
+## The Pipe operator
+
+* You are going to see a lot of this symbol
+
+```{r piping, eval=FALSE}
+
+%>%
+
+```
+
+* This is the *pipe* operator
+* Do not fear the pipe operator
+* It means "then do this"
 
 
 
