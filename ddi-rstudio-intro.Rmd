@@ -1,5 +1,5 @@
 ---
-title: "Introduction to R & RStudio"
+title: "Introduction to RStudio"
 author: "Dr Peter McKenna | p.mckenna@hw.ac.uk"
 date: "29/11/2021"
 output:
