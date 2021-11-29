@@ -1,14 +1,7 @@
 ---
-title: "ddi-intro-r"
-author: "petermckenna"
-date: "29/11/2021"
-output: html_document
----
-
----
-title: "Introduction to Data Visualisation - RStudio"
+title: "Introduction to R & RStudio"
 author: "Dr Peter McKenna | p.mckenna@hw.ac.uk"
-date: "16/11/2021"
+date: "29/11/2021"
 output:
   pdf_document:
     toc: yes
@@ -22,6 +15,8 @@ output:
     toc_depth: '3'
     df_print: paged
 ---
+
+----
 
 ```{r setup, include=F, warning=FALSE}
 
@@ -42,13 +37,7 @@ knitr::opts_chunk$set(echo = T,
 
 library(tidyverse)
 
-my_theme <-
-  theme_classic(base_size = 15) + # change the base size of text
-  theme(
-    axis.title = element_text(size = rel(1.05)), # adjust the relative size of axis text
-    legend.title = element_text(size = rel(1.05)), # adjust the relative size of the legend text
-    plot.title = element_text(hjust = 0.5))  # centre the title (Horizontal alignment: 0 = left, 0.5 = center, 1 = right)
- 
+
 ```
 
 
@@ -69,7 +58,9 @@ Code chunks look like this, and contain the code for each of the operations we a
 
 
 ```{r chunk example}
+
 # this is what a code chunk looks like
+
 ```
 
 
@@ -90,6 +81,10 @@ Code chunks look like this, and contain the code for each of the operations we a
 
 
 # Introduction to R
+
+* Let's start by opening a new project
+* Projects act as directories, so all the RStudio files you create in one project remain part of that project
+* Once you have saved you project in a memorable place open a new script (Ctrl + Shift + N)
 
 
 ## Create subdirectories
@@ -184,6 +179,7 @@ bmi <-
 
 
 ```
+
 
 ## Using functions
 
@@ -319,7 +315,7 @@ test_scores <-
 
 ```
 
-* Type of conditional subsetting
+* Types of conditional subsetting
 
 ```{r conditional subsetting exercises}
 
@@ -355,6 +351,7 @@ students[students %in% c("Teresa", "Ronald")]
 
 ----
 
+
 # Introduction to `tidyverse`
 
 * In this introductory class you are going to learn how to
@@ -362,6 +359,7 @@ students[students %in% c("Teresa", "Ronald")]
   + wrangle and explore the data using the *Tidyverse* functions
   + explore the data's distribution
   + generate plots
+
   
 # The `tidyverse`
 
@@ -401,6 +399,7 @@ students[students %in% c("Teresa", "Ronald")]
 
 
 # Working with data objects
+
 
 ## Download the data
 
@@ -465,6 +464,7 @@ glimpse(data) # short by-vector summary
 
 # Data wrangling and manipulation with the `tidyverse`
 
+
 ## Using `filter` to subset by row
 
 ```{r filtering data}
@@ -485,6 +485,7 @@ data %>%
 
 ```
 
+
 ## Using `mutate` to append object
 
 ```{r mutate data}
@@ -499,6 +500,7 @@ data %>%
                          "male"))
 
 ```
+
 
 ## Using `select` to subset by column
 
@@ -524,10 +526,12 @@ data %>%
 
 ```
 
+
 # Summarising data
 
 * In research, we are interested in summary statistics
-* I'll give you a brief overview of how to generate using the `tidyverse`
+* I'll give you a brief overview of how to generate summaries using the `tidyverse`
+* To do so, we use the functions `group_by` and `summarise` with other existing mathematical functions. 
 
 ```{r summarising data}
 
@@ -550,12 +554,36 @@ data %>%
 
 ```
 
+# Plotting Data
+
+* Let's make a plt of user conversation length based on the sex of the smart speaker voice. 
+* We use the `ggplot2` package functions to do so
+* Note, this package does not support the `%>%` operator, using `+` to chain commands instead
+
+```{r plot avg_conv}
+
+data %>%
+ggplot(., mapping = aes(x = voice_type, 
+                        y = conv_len,
+                        fill = voice_type)) +  # notice mapping comes first here
+  geom_bar(stat = "summary", 
+           fun.y = "mean") +                   # apply black outline to bars
+  labs(title = "User Conversational Length by Agent Voice Type\n",
+       x = "\nSmart Speaker Voice Type",       
+       y = "Conversation Length (seconds)\n") +
+  theme_classic(base_size = 15) +                # use ggplot's calssic theme size 20 text
+  theme(legend.position = "none")                # remove the legend - it's not useful here
 
 
 
+```
 
 
+# Additional resources
 
+[R for Data Science](http://r4ds.had.co.nz/) -- useful for learning *Tidyverse* syntax
+
+[R Graphics Cookbook, 2nd edition](https://r-graphics.org/index.html) -- very useful starting guide for ggplot2
 
 
 
